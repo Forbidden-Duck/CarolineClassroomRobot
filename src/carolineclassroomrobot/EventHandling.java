@@ -268,7 +268,7 @@ public class EventHandling implements WindowListener, ActionListener, KeyListene
         int arrayIndex = 0;
         // Loop through all the rows
         // Avoiding the teacher's desk
-        for (int x = 2; x < totalStudents; x++) {
+        for (int x = 2; x < totalX; x++) {
             // Loop through all the columns
             for (int y = 0; y < totalY; y++) {
                 // Get the students name
