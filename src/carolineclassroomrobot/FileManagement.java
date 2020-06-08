@@ -4,6 +4,7 @@ package carolineclassroomrobot;
 import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
@@ -12,6 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 // Swing Imports
 import javax.swing.*;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * The file management for Caroline's Classroom Robot
@@ -66,65 +68,34 @@ public class FileManagement {
         try {
             // Instantiate a new Buffered Reader with the dataFileName
             BufferedReader br = new BufferedReader(new FileReader(fileName));
-
-            // Define the amount of headings
-            int headingEndIndex = 4;
-
-            // Instantiate x
-            int x = 1;
-            // Instantiate readLine
-            String readLine;
-            // Loop the fields on the X Axis (Starting from 1)
-            while ((readLine = br.readLine()) != null) {
-                // Check if the headings are still being present
-                if (x <= headingEndIndex) {
-                    // Skip date
-                    // We want date to increment everyday
-                    if (x < headingEndIndex) {
-                        headings[x - 1] = readLine.split(",")[1];
-                    } else {
-                        // Set date format
-                        // Get current date time
-                        // Create date label
-                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-                        LocalDateTime now = LocalDateTime.now();
-                        headings[x - 1] = dtf.format(now);
-                    }
-                } else {
-                    // Define the line values
-                    String[] temp = readLine.split(",");
-                    // Set the indexes
-                    int yIndex = Integer.parseInt(temp[0]);
-                    int xIndex = Integer.parseInt(temp[1]);
-                    // Set the title
-                    String title = temp[2];
-
-                    if (title.equals("BKGRND FILL")) {
-                        // Check if teacher desk is active
-                        if (xIndex == 1) {
-                            // Set the text field behind to editable
-                            txtFields[xIndex - 1][yIndex].setEditable(true);
-                        } else {
-                            // Set the text field ahead to editable
-                            txtFields[xIndex + 1][yIndex].setEditable(true);
-                        }
-                        // Set the background colour
-                        txtFields[xIndex][yIndex].setBackground(new Color(148, 185, 224));
-                    } else {
-                        // Set the text field name
-                        txtFields[xIndex][yIndex].setText(title);
-                    }
-                }
-                x++;
-            }
-            br.close();
-
-            // Set the headings
-            carolineObj.setHeadings(headings);
+            // Read the file using the method
+            BufferedRead(br);
         } catch (Exception e) {
             System.out.println("Error Reading:");
             // Print the error in console
             e.printStackTrace();
+        }
+    }
+
+    public void readFile(String filePath) {
+        // Try to read and display the CSV File
+        // Catch any exceptions
+        try {
+            // Instantiate a new Buffered Reader with the file path
+            BufferedReader br = new BufferedReader(new FileReader(filePath));
+            // Read the file using the method
+            BufferedRead(br);
+        } catch (Exception e) {
+            if (e.getMessage().equals(filePath + " (The system cannot find the file specified)")) {
+                // Send a message dialog box
+                showMessageDialog(null, "File not found");
+            } else {
+                System.out.println("Error Reading:");
+                // Print the error in console
+                e.printStackTrace();
+            }
+            // If failed use the other read file
+            readFile();
         }
     }
 
@@ -240,6 +211,69 @@ public class FileManagement {
             raf.close();
         } catch (Exception e) {
             System.out.println("Error Saving RAF:");
+            // Print the error in console
+            e.printStackTrace();
+        }
+    }
+
+    private void BufferedRead(BufferedReader br) {
+        try {
+            // Define the amount of headings
+            int headingEndIndex = 4;
+
+            // Instantiate x
+            int x = 1;
+            // Instantiate readLine
+            String readLine;
+            // Loop the fields on the X Axis (Starting from 1)
+            while ((readLine = br.readLine()) != null) {
+                // Check if the headings are still being present
+                if (x <= headingEndIndex) {
+                    // Skip date
+                    // We want date to increment everyday
+                    if (x < headingEndIndex) {
+                        headings[x - 1] = readLine.split(",")[1];
+                    } else {
+                        // Set date format
+                        // Get current date time
+                        // Create date label
+                        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        LocalDateTime now = LocalDateTime.now();
+                        headings[x - 1] = dtf.format(now);
+                    }
+                } else {
+                    // Define the line values
+                    String[] temp = readLine.split(",");
+                    // Set the indexes
+                    int yIndex = Integer.parseInt(temp[0]);
+                    int xIndex = Integer.parseInt(temp[1]);
+                    // Set the title
+                    String title = temp[2];
+
+                    if (title.equals("BKGRND FILL")) {
+                        // Check if teacher desk is active
+                        if (xIndex == 1) {
+                            // Set the text field behind to editable
+                            txtFields[xIndex - 1][yIndex].setEditable(true);
+                        } else {
+                            // Set the text field ahead to editable
+                            txtFields[xIndex + 1][yIndex].setEditable(true);
+                        }
+                        // Set the background colour
+                        txtFields[xIndex][yIndex].setBackground(new Color(148, 185, 224));
+                    } else {
+                        // Set the text field name
+                        txtFields[xIndex][yIndex].setText(title);
+                    }
+                }
+                x++;
+            }
+            br.close();
+
+            // Set the headings
+            carolineObj.setHeadings(headings);
+        } catch (Exception e) {
+            System.out.println("Error Reading:");
             // Print the error in console
             e.printStackTrace();
         }

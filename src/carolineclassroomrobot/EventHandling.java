@@ -18,6 +18,9 @@ import java.awt.Color;
 import java.awt.Font;
 import static javax.swing.JOptionPane.*;
 import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+import java.io.File;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * The event handling for Caroline's Classroom Robot
@@ -46,7 +49,8 @@ public class EventHandling implements WindowListener, ActionListener, KeyListene
     JTextField txtFind;
     // Define the menuitems
     JMenuItem itemSaveClass, itemSaveRAF,
-            itemClear, itemRestore;
+            itemClear, itemRestore,
+            itemOpen;
 
     // The instance of the main instance in BillsReportingSystem
     // Note: This is so we can access public methods in the main instance
@@ -85,6 +89,7 @@ public class EventHandling implements WindowListener, ActionListener, KeyListene
         // File Items
         itemSaveClass = fileArray[0];
         itemSaveRAF = fileArray[1];
+        itemOpen = fileArray[2];
 
         // Edit Items
         itemClear = editArray[0];
@@ -184,6 +189,23 @@ public class EventHandling implements WindowListener, ActionListener, KeyListene
             filemng.setComponents(txtFields);
             filemng.saveRAF();
         }
+        // ITEM OPEN
+        if (e.getSource() == itemOpen) {
+            // Get file path
+            String filePath = openFileDialog();
+            // Check if that the method didn't return null
+            if (filePath != null) {
+                // Create a new instance of FileManagement
+                // Set the components
+                // Save the table to a CSV File
+                FileManagement filemng = new FileManagement(carolineObj);
+                filemng.setComponents(txtFields);
+                filemng.readFile(filePath);
+            } else {
+                // Send a message dialog box
+                showMessageDialog(null, "File not found");
+            }
+        }
         // ITEM CLEAR
         if (e.getSource() == itemClear) {
             clearStudentNames();
@@ -197,6 +219,28 @@ public class EventHandling implements WindowListener, ActionListener, KeyListene
             filemng.setComponents(txtFields);
             filemng.readFile();
         }
+    }
+
+    // Item Methods
+    private String openFileDialog() {
+        // Variable for the selected file
+        File selectedFile = null;
+
+        // Instantiate the File Chooser
+        JFileChooser fileChooser = new JFileChooser();
+        // Set the directory
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        // Set the file filter
+        fileChooser.setFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
+
+        // Show the file dialog
+        int fileResult = fileChooser.showOpenDialog(carolineObj);
+        // Check if they a file was chosen
+        if (fileResult == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+        }
+
+        return selectedFile != null ? selectedFile.getAbsolutePath() : null;
     }
 
     // Button Methods

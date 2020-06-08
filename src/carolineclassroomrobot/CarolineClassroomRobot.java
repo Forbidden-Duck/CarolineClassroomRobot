@@ -36,7 +36,8 @@ public class CarolineClassroomRobot extends JFrame {
     JMenuBar myMenuBar;
     JMenu menuFile, menuEdit;
     JMenuItem itemSaveClass, itemSaveRAF,
-            itemClear, itemRestore;
+            itemClear, itemRestore,
+            itemOpen;
     // String to hold the name of the front desk
     String frontDeskStr = "Front Desk";
 
@@ -121,6 +122,7 @@ public class CarolineClassroomRobot extends JFrame {
         // Create the MenuItems
         // EVENT, MENU, MENUITEM, MENUITEMNAME
         // MENU FILE ITEMS
+        itemOpen = LibraryComponents.LocateMenuItem(event, menuFile, itemOpen, "Open");
         itemSaveClass = LibraryComponents.LocateMenuItem(event, menuFile, itemSaveClass, "Save");
         itemSaveRAF = LibraryComponents.LocateMenuItem(event, menuFile, itemSaveRAF, "Save RAF");
 
@@ -131,7 +133,7 @@ public class CarolineClassroomRobot extends JFrame {
         // Set the MenuItems in the event instance
         event.setItems(
                 // File Items
-                new JMenuItem[]{itemSaveClass, itemSaveRAF},
+                new JMenuItem[]{itemSaveClass, itemSaveRAF, itemOpen},
                 // Edit Items
                 new JMenuItem[]{itemClear, itemRestore});
     }
