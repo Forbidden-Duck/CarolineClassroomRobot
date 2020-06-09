@@ -157,8 +157,6 @@ public class SortArrayPopup extends JFrame implements MouseListener {
 
             // Update the label with no background
             UpdateLabel(studentIndex, false);
-            UpdateLabel(studentIndex, false);
-            UpdateLabel(studentIndex, false);
             // Reset the index
             studentIndex = -1;
         }
@@ -170,8 +168,6 @@ public class SortArrayPopup extends JFrame implements MouseListener {
                 // Check for the clicked label
                 if (e.getSource() == studentLabels[x][0]) {
                     // Update the label with a background
-                    UpdateLabel(x, true);
-                    UpdateLabel(x, true);
                     UpdateLabel(x, true);
                     // Set the index to the student
                     studentIndex = x;
