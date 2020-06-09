@@ -188,12 +188,12 @@ public class FileManagement {
                     // Check if the field has blue background
                     if (txtFields[x][y].getText().length() > 0) {
                         // Set the string
-                        str = y + "," + x + "," + txtFields[x][y].getText() + "\n";
+                        str = y + "," + x + "," + txtFields[x][y].getText();
                         // Write the bytes to the RAF
                         raf.writeUTF(str);
                     } else if (rgb[0] == blue[0] && rgb[1] == blue[1] && rgb[2] == blue[2]) {
                         // Set the string
-                        str = y + "," + x + "," + "BKGRND FILL,blue\n";
+                        str = y + "," + x + "," + "BKGRND FILL,blue";
                         // Write the bytes to the RAF
                         raf.writeUTF(str);
 
